@@ -3,15 +3,16 @@
 ##############################
 
 dataset:
-  time_list: [9, 12, 15, 18, 21]   # hours; list or 'all'. If 'all', use all hours. The current list = [9, 12, 15, 18]
+  time_list: [9, 12, 15, 18]  # [9, 12, 15, 18, 21]   # hours; list or 'all'. If 'all', use all hours. The current list = [9, 12, 15, 18]
   train_start: "2016-01-01"  # the start date of the train data; date or 'first'
-  train_end: "2023-06-30"  # the end date of the train data; date
+  train_end: "2021-12-31"  # the end date of the train data; date
   valid_start: "2022-01-01"  # the start date of the validation data; date
   valid_end: "2022-12-31"  # the end date of the validation data; date
-  test_start: "2023-07-01"  # the start date of the test data; date
+  test_start: "2023-01-01"  # the start date of the test data; date
   test_end: "2023-09-30"  # the end date of the train data; date or 'last'
-  seq_len_src: 5  # = (num of timestamps in 1 day) * (days) = 8 periods * 1 day; int
-  seq_len_tgt: 5  # = (num of timestamps in 1 day) * (days) = 8 periods * 1 day; int
+  seq_len_src: 8  # = (num of timestamps in 1 day) * (days) = 8 periods * 1 day; int
+  seq_len_tgt: 8  # = (num of timestamps in 1 day) * (days) = 8 periods * 1 day; int
+  lag_len: 4  # = (num of timestamps in 1 day) * (days) = 8 periods * 1 day; int
   batch_size: 64  # the num of batch size. len(train_dataset)=1368; int
 
 model:
