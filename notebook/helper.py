@@ -112,25 +112,25 @@ class MyStandardScaler:
 
     def _adjust_df(self, df):
         # called before fitted
-        if self.num_vars == None:
+        if self.vars == None:
             print('Error: My Standard Scaler not fitted yet.')
             return None
         
         # adjust the number of cols of df
-        if df.shape[1] < self.num_vars:
-            dummy = pd.DataFrame(np.zeros((df.shape[0], self.num_vars - df.shape[1])), index=df.index)
+        if df.shape[1] < len(self.vars):
+            dummy = pd.DataFrame(np.zeros((df.shape[0], len(self.vars) - df.shape[1])), columns=self.vars[df.shape[1]:], index=df.index)
             return pd.concat([df, dummy], axis=1)
-        elif df.shape[1] > self.num_vars:
-            return df.iloc[:, :self.num_vars]
+        elif df.shape[1] > len(self.vars):
+            return df.iloc[:, :len(self.vars)]
 
     def fit(self, df):
-        self.num_vars = df.shape[1]
+        self.vars = df.columns
         self.ss.fit(df)
 
     def transform(self, df):        
         _val = self.ss.transform(self._adjust_df(df))
-        return pd.DataFrame(_val, columns=df.columns, index=df.index)
+        return pd.DataFrame(_val, columns=self.vars, index=df.index)
     
     def inverse_transform(self, df):
         _val = self.ss.inverse_transform(self._adjust_df(df))
-        return pd.DataFrame(_val, columns=df.columns, index=df.index).iloc[:, :self.num_vars]
+        return pd.DataFrame(_val, columns=self.vars, index=df.index).iloc[:, :df.shape[1]]
