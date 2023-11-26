@@ -178,9 +178,6 @@ def anomaly_detection(df_valid_true, df_valid_pred, df_test_true, df_test_pred):
         test_diff = np.reshape(np.array(df_test_true[name] - df_test_pred['pred_' + name]), (-1, 8))
         anomaly_scores = calc_anomaly_scores(valid_diff, test_diff)
 
-        # anomaly detection
-        anomaly_date, anomaly_next_date = get_anomaly_date(df_test_true.index[0], df_test_true.index[-1], anomaly_scores, threshold)
-
         # get the dates and next dates where anomaly_scores > threshold
         dates = pd.date_range(start=df_test_true.index[0], end=df_test_true.index[-1])
         anomaly_date = dates[anomaly_scores > threshold]
