@@ -2,6 +2,11 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+# set random seed
+fix_seed = 1111
+np.random.seed(fix_seed)
+torch.manual_seed(fix_seed)
+
 class NN(nn.Module):
     '''
     train LSTM encoder-decoder and make predictions
