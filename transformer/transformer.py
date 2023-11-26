@@ -10,6 +10,11 @@ from tqdm.notebook import tqdm
 from TimeFeature import time_features
 from Embedding import DataEmbedding
 
+# set random seed
+fix_seed = 1111
+np.random.seed(fix_seed)
+torch.manual_seed(fix_seed)
+
 class TransSequenceDataset(Dataset):
     def __init__(self, dataframe, seq_len_src=56, seq_len_tgt=8, lag_len=1):
         self.seq_len_src = seq_len_src
