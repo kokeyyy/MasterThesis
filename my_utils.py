@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import datetime
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import plotly.graph_objects as go
@@ -136,3 +137,62 @@ class MyStandardScaler:
     def inverse_transform(self, df):
         _val = self.ss.inverse_transform(self._adjust_df(df))
         return pd.DataFrame(_val, columns=self.vars, index=df.index).iloc[:, :df.shape[1]]
+
+# helper function for anomaly detection
+def calc_anomaly_scores(matrix_valid, matrix_test):
+    '''
+    : calculate anomaly scores at each day by quadratic form
+    : matrix_valid :  valid data for calculating mean and variance;  numpy array
+    : matrix_test  :  test data for getting anomaly scores;  numpy array
+    : return       :  anomaly_scores; numpy array
+    '''
+    # compute mean and cov inverse
+    mean = np.matrix(matrix_valid.mean(axis=0))
+    cov_inv = np.matrix(np.cov(matrix_valid, rowvar=False)).getI()
+
+    # apply quadratic formula to each row of matrix
+    output = np.zeros(matrix_test.shape[0])
+    for i in range(matrix_test.shape[0]):
+        output[i] = ((matrix_test[i] - mean) * cov_inv * np.transpose(matrix_test[i] - mean)).item(0)
+
+    return output
+
+def anomaly_detection(df_valid_true, df_valid_pred, df_test_true, df_test_pred):
+    '''
+    : main function for anomaly detection
+    : df_valid_true :  true valid data; dataframe
+    : df_valid_pred :  predicted valid data; dataframe
+    : df_test_true  :  true test data; dataframe
+    : df_test_pred  :  predicted test data; dataframe
+    : return        :  anomaly_date, anomaly_next_date; numpy array
+    '''
+    all_anomaly_date, all_anomaly_next_date = [], []
+    summary = pd.DataFrame([], columns=['Threshold', 'Number of Anomaly-Detected Data'])
+
+    for name in df_valid_true.columns:
+        # compute anomaly scores using valid data and set top 1% as threshold
+        valid_diff = np.reshape(np.array(df_valid_true[name] - df_valid_pred['pred_' + name]), (-1, 8))
+        threshold = np.percentile(calc_anomaly_scores(valid_diff, valid_diff), 99)
+
+        # compute anomaly scores using test data
+        test_diff = np.reshape(np.array(df_test_true[name] - df_test_pred['pred_' + name]), (-1, 8))
+        anomaly_scores = calc_anomaly_scores(valid_diff, test_diff)
+
+        # anomaly detection
+        anomaly_date, anomaly_next_date = get_anomaly_date(df_test_true.index[0], df_test_true.index[-1], anomaly_scores, threshold)
+
+        # get the dates and next dates where anomaly_scores > threshold
+        dates = pd.date_range(start=df_test_true.index[0], end=df_test_true.index[-1])
+        anomaly_date = dates[anomaly_scores > threshold]
+        anomaly_next_date = [date + datetime.timedelta(days=1) for date in anomaly_date]
+
+        # append to list
+        all_anomaly_date.append(anomaly_date)
+        all_anomaly_next_date.append(anomaly_next_date)
+
+        # add row to summary df
+        summary.loc[name[:-6]] = [threshold, anomaly_date.shape[0]]
+    
+    display(summary)
+
+    return all_anomaly_date, all_anomaly_next_date
