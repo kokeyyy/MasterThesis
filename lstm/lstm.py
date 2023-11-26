@@ -5,6 +5,11 @@ import torch.nn as nn
 from torch.utils.data import Dataset
 from tqdm.notebook import tqdm
 
+# set random seed
+fix_seed = 1111
+np.random.seed(fix_seed)
+torch.manual_seed(fix_seed)
+
 class LSTMSequenceDataset(Dataset):
     def __init__(self, dataframe, seq_len_src=56, seq_len_tgt=8, lag_len=8):
         self.seq_len_src = seq_len_src
