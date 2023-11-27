@@ -117,7 +117,7 @@ def lstm_predict(model, dataset):
             hidden = None
             
             # input_tensor
-            lstm_input = src
+            lstm_input = src[:, -1:, :]
             
             # predict recursively
             for t in range(tgt.shape[1]):
@@ -125,10 +125,7 @@ def lstm_predict(model, dataset):
                 outputs = torch.cat((outputs, lstm_output[:, -1, :]), dim=0)
                 
                 # input at the next period = (location output from prediction) + (acurate dummy input from test data)
-                lstm_output = torch.cat((lstm_output, tgt[:, t:t+1, model.num_features_pred:]), dim=2)  # lstm_output.shape = [batch_size, 1, num_features]
-                
-                # outputの1期分を付け加えて、最初の1期を消す
-                lstm_input = torch.cat([lstm_input[:, 1:, :], lstm_output[:, -1:, :]], dim=1)  # lstm_input.shape = [batch_size, seq_len_src, num_features]            
+                lstm_input = torch.cat((lstm_output, tgt[:, t:t+1, model.num_features_pred:]), dim=2)  # lstm_output.shape = [batch_size, 1, num_features]          
 
             all_outputs = torch.cat([all_outputs, outputs], dim=0)
         
