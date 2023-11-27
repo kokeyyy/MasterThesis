@@ -67,7 +67,7 @@ class LSTM(nn.Module):
         output = self.relu(output)
         output = self.fc2(output)
         
-        return output[:, -1:, :self.num_features_pred], (h0, c0)  # output.shape = [batch_size, seq_len_src, num_features_pred]
+        return output[:, :, :self.num_features_pred], (h0, c0)  # output.shape = [batch_size, seq_len_src, num_features_pred]
     
 def lstm_train(model, data_loader):
     total_losses = []
@@ -80,8 +80,8 @@ def lstm_train(model, data_loader):
         hidden_states = None
         
         # input for lstm
-        # input_src = torch.cat((src[:,-1:,:], tgt[:, :-1, :]), dim=1)
-        input_src = src
+        input_src = torch.cat((src[:,-1:,:], tgt[:, :-1, :]), dim=1)
+        # input_src = src
         
         output, hidden = model(input_src, hidden_states)
         
