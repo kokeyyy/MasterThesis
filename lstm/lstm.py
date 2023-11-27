@@ -80,7 +80,8 @@ def lstm_train(model, data_loader):
         hidden_states = None
         
         # input for lstm
-        input_src = torch.cat((src[:,-1:,:], tgt[:, :-1, :]), dim=1)
+        # input_src = torch.cat((src[:,-1:,:], tgt[:, :-1, :]), dim=1)
+        input_src = src
         
         output, hidden = model(input_src, hidden_states)
         
