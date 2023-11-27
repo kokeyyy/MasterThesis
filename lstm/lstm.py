@@ -67,7 +67,7 @@ class LSTM(nn.Module):
         output = self.relu(output)
         output = self.fc2(output)
         
-        return output[:, :, :self.num_features_pred], (h0, c0)  # output.shape = [batch_size, seq_len_src, num_features_pred]
+        return output[:, -1:, :self.num_features_pred], (h0, c0)  # output.shape = [batch_size, seq_len_src, num_features_pred]
     
 def lstm_train(model, data_loader):
     total_losses = []
