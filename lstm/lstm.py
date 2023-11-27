@@ -79,10 +79,10 @@ def lstm_train(model, data_loader):
         # initialize hidden states
         hidden_states = None
         
-        # # input for lstm
-        # input_tgt = torch.cat((src[:,-1:,:], tgt[:, :-1, :]), dim=1)
+        # input for lstm
+        input_src = torch.cat((src[:,-1:,:], tgt[:, :-1, :]), dim=1)
         
-        output, hidden = model(src, hidden_states)
+        output, hidden = model(input_src, hidden_states)
         
         # compute the loss
         loss = model.criterion(output, tgt[:, :, :model.num_features_pred])
