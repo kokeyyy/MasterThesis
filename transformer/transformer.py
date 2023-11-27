@@ -98,7 +98,11 @@ class Transformer(nn.Module):
                                                       norm=decoder_norm)
 
         # define output layer
-        self.linear = nn.Linear(d_model, d_output)
+        self.linear = nn.Linear(d_model, 128)
+        self.linear2 = nn.Linear(128, 512)
+        self.linear3 = nn.Linear(512, d_output)
+
+        self.relu = nn.relu()
 
     def set_optimizer(self, optimizer):
         self.optimizer = optimizer
@@ -120,6 +124,11 @@ class Transformer(nn.Module):
         outs = self.transformer_decoder(embedding_tgt, memory, mask_tgt)
 
         output = self.linear(outs)
+        output = self.relu(output)
+        output = self.linear2(output)
+        output = self.relu(output)
+        output = self.linear3(output)
+        
         return output
 
     def encode(self, src, src_mark, mask_src):
@@ -191,6 +200,10 @@ def trans_predict(model, dataset):
 
                 output = model.decode(outputs, tgt_mark[:, i:i+1, :], memory, mask_tgt)
                 output = model.linear(output)  # output.shape = [バッチサイズ1, ウィンドウサイズi(累積される), 変数]
+                output = model.relu(output)
+                output = model.linear2(output)
+                output = model.relu(output)
+                output = model.linear3(output)
 
                 # convert predicted dummies to the actual ones
                 output = torch.cat([output[:, -1:, :model.num_features_pred], tgt[:, i:i+1, model.num_features_pred:]], dim=2)
