@@ -102,7 +102,7 @@ class Transformer(nn.Module):
         self.linear2 = nn.Linear(128, 512)
         self.linear3 = nn.Linear(512, d_output)
 
-        self.relu = nn.relu()
+        self.relu = nn.ReLu()
 
     def set_optimizer(self, optimizer):
         self.optimizer = optimizer
