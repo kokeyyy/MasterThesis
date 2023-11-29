@@ -76,7 +76,7 @@ class Transformer(nn.Module):
                                                 dim_feedforward=dim_feedforward,
                                                 dropout=dropout,
                                                 batch_first=True,
-                                                activation='gelu'
+                                                activation='relu'
                                                )
         encoder_norm = LayerNorm(d_model)
         self.transformer_encoder = TransformerEncoder(encoder_layer,
@@ -90,7 +90,7 @@ class Transformer(nn.Module):
                                                 dim_feedforward=dim_feedforward,
                                                 dropout=dropout,
                                                 batch_first=True,
-                                                activation='gelu'
+                                                activation='relu'
                                                )
         decoder_norm = LayerNorm(d_model)
         self.transformer_decoder = TransformerDecoder(decoder_layer,
