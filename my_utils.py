@@ -69,17 +69,7 @@ def plot_population(y_true, y_pred, title='Results', flag='plot', anomaly_dateti
         fig.update_xaxes(title='Date', showgrid=False, row=i+1, col=1)
         fig.update_yaxes(title='Population', showgrid=False, row=i+1, col=1)
 
-    fig.update_layout(legend=dict(x=0.99,
-                              y=0.99,
-                              xanchor='right',
-                              yanchor='top',
-                              orientation='h',
-                              ),
-                      hovermode='x unified',
-                      title=dict(text=title,font=dict(size=40))
-                     )
-
-    if flag == 'anomaly_detection':
+        if flag == 'anomaly_detection':
         for t, next_t in zip(anomaly_datetime[i], anomaly_next_hours[i]):
             fig.add_vrect(
                         x0=t,
@@ -89,6 +79,16 @@ def plot_population(y_true, y_pred, title='Results', flag='plot', anomaly_dateti
                         line_width=0,
                         layer='below'
                         )
+
+    fig.update_layout(legend=dict(x=0.99,
+                              y=0.99,
+                              xanchor='right',
+                              yanchor='top',
+                              orientation='h',
+                              ),
+                      hovermode='x unified',
+                      title=dict(text=title,font=dict(size=40))
+                     )
 
     fig.update_layout(
                      height=4000,
