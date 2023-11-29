@@ -70,15 +70,17 @@ def plot_population(y_true, y_pred, title='Results', flag='plot', anomaly_dateti
         fig.update_yaxes(title='Population', showgrid=False, row=i+1, col=1)
 
         if flag == 'anomaly_detection':
-        for t, next_t in zip(anomaly_datetime[i], anomaly_next_hours[i]):
-            fig.add_vrect(
-                        x0=t,
-                        x1=next_t,
-                        fillcolor='pink',
-                        opacity=0.9,
-                        line_width=0,
-                        layer='below'
-                        )
+            for t, next_t in zip(anomaly_datetime[i], anomaly_next_hours[i]):
+                fig.add_vrect(
+                            x0=t,
+                            x1=next_t,
+                            fillcolor='pink',
+                            opacity=0.9,
+                            line_width=0,
+                            layer='below',
+                            row=i+1,
+                            col=1
+                            )
 
     fig.update_layout(legend=dict(x=0.99,
                               y=0.99,
