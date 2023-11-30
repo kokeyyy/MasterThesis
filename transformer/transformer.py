@@ -103,6 +103,7 @@ class Transformer(nn.Module):
         self.linear3 = nn.Linear(512, d_output)
 
         self.relu = nn.ReLU()
+        self.dropout = nn.Dropout(0.3)
 
     def set_optimizer(self, optimizer):
         self.optimizer = optimizer
@@ -125,8 +126,10 @@ class Transformer(nn.Module):
 
         output = self.linear(outs)
         output = self.relu(output)
+        output = self.dropout(output)
         output = self.linear2(output)
         output = self.relu(output)
+        output = self.dropout(output)
         output = self.linear3(output)
         
         return output
