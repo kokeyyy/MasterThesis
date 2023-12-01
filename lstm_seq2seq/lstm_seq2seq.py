@@ -57,11 +57,12 @@ class LSTM_seq2seq(nn.Module):
         self.encoder_lstm = nn.LSTM(input_size = 128, hidden_size = hidden_size, num_layers = num_layers, batch_first=True, dropout = dropout)
         self.decoder_lstm = nn.LSTM(input_size = num_features, hidden_size = hidden_size, num_layers = num_layers, batch_first=True, dropout = dropout)
         # define fc layer for encoder
-        self.linear = nn.Linear(num_features, 64)
-        self.linear2 = nn.Linear(64, 128)
+        self.linear = nn.Linear(num_features, 256)
+        self.linear2 = nn.Linear(256, 128)
         # define fc layer for decoder
-        self.linear3 = nn.Linear(hidden_size, 1024)
-        self.linear4 = nn.Linear(1024, num_features_pred)
+        self.linear3 = nn.Linear(hidden_size, 512)
+        self.linear4 = nn.Linear(512, 1024)
+        self.linear5 = nn.Linear(1024, num_features_pred)
         # define relu
         self.relu = nn.ReLU()
         # define dropout
@@ -84,12 +85,12 @@ class LSTM_seq2seq(nn.Module):
         :                              element in the sequence
         '''
         h0 = None
-        lstm_out, (h,c) = self.decoder_lstm(src, h0)
-        # output = self.linear(src)
-        # output = self.relu(output)
+        # lstm_out, (h,c) = self.decoder_lstm(src, h0)
+        output = self.linear(src)
+        output = self.relu(output)
         # output = self.dropout(output)
-        # output = self.linear2(output)
-        # lstm_out, (h,c) = self.encoder_lstm(output, h0)
+        output = self.linear2(output)
+        lstm_out, (h,c) = self.encoder_lstm(output, h0)
 
         return (h, c)
 
@@ -107,6 +108,9 @@ class LSTM_seq2seq(nn.Module):
         output = self.relu(output)
         output = self.dropout(output)
         output = self.linear4(output)
+        output = self.relu(output)
+        output = self.dropout(output)
+        output = self.linear5(output)
 
         return output, (h, c)
 
