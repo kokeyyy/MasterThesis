@@ -54,7 +54,7 @@ class LSTM_seq2seq(nn.Module):
         self.device = device
 
         # define LSTM layer
-        self.encoder_lstm = nn.LSTM(input_size = 10, hidden_size = 64, num_layers = num_layers, batch_first=True, dropout = dropout)
+        self.encoder_lstm = nn.LSTM(input_size = 10, hidden_size = hidden_size, num_layers = num_layers, batch_first=True, dropout = dropout)
         self.decoder_lstm = nn.LSTM(input_size = num_features, hidden_size = hidden_size, num_layers = num_layers, batch_first=True, dropout = dropout)
         # define fc layer for encoder
         self.linear = nn.Linear(num_features, 256)
