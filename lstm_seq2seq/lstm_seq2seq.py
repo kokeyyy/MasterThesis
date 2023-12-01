@@ -57,12 +57,12 @@ class LSTM_seq2seq(nn.Module):
         self.encoder_lstm = nn.LSTM(input_size = num_features, hidden_size = hidden_size, num_layers = num_layers, batch_first=True, dropout = dropout)
         self.decoder_lstm = nn.LSTM(input_size = num_features, hidden_size = hidden_size, num_layers = num_layers, batch_first=True, dropout = dropout)
         # define fc layer for encoder
-        self.linear = nn.Linear(num_features, 256)
-        self.linear2 = nn.Linear(256, 10)
+        # self.linear = nn.Linear(num_features, 256)
+        # self.linear2 = nn.Linear(256, 10)
         # define fc layer for decoder
-        self.linear3 = nn.Linear(hidden_size, 512)
-        self.linear4 = nn.Linear(512, 1024)
-        self.linear5 = nn.Linear(1024, num_features_pred)
+        self.linear3 = nn.Linear(hidden_size, 1024)
+        self.linear4 = nn.Linear(1024, 2048)
+        self.linear5 = nn.Linear(2048, num_features_pred)
 
         # self.linear6 = nn.Linear(num_features, 256)
         # self.linear7 = nn.Linear(256, 10)
