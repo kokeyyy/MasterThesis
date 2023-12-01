@@ -63,6 +63,9 @@ class LSTM_seq2seq(nn.Module):
         self.linear3 = nn.Linear(hidden_size, 512)
         self.linear4 = nn.Linear(512, 1024)
         self.linear5 = nn.Linear(1024, num_features_pred)
+
+        self.linear6 = nn.Linear(num_features, 256)
+        self.linear7 = nn.Linear(256, 10)
         # define relu
         self.relu = nn.ReLU()
         # define dropout
@@ -102,6 +105,10 @@ class LSTM_seq2seq(nn.Module):
         :                                   hidden gives the hidden state and cell state for the last
         :                                   element in the sequence; tuple
         '''
+
+        output = self.linear6(src)
+        output = self.relu(output)
+        src = self.linear7(output)
 
         lstm_out, (h, c) = self.decoder_lstm(src, encoder_hidden_states)
         output = self.linear3(lstm_out)
