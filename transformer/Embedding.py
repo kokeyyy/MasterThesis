@@ -35,6 +35,16 @@ class TokenEmbedding(nn.Module):
     def forward(self, x):
         x = self.tokenConv(x.permute(0, 2, 1)).transpose(1,2)
         return x
+
+#モデルに入力するために次元を拡張する
+class TokenEmbedding(nn.Module):
+    def __init__(self, c_in, d_model):
+        super(TokenEmbedding, self).__init__()
+        self.tokenConv = nn.Linear(c_in, d_model) 
+
+    def forward(self, x):
+        x = self.tokenConv(x)
+        return x
     
 
 class TimeFeatureEmbedding(nn.Module):
