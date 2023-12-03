@@ -116,12 +116,12 @@ class LSTM_seq2seq(nn.Module):
         output = self.relu(output)
         output = self.dropout(output)
         output = self.linear4(output)
-        output = self.relu(output)
-        output = self.dropout(output)
-        output = self.linear5(output)
-        output = self.relu(output)
-        output = self.dropout(output)
-        output = self.linear6(output)
+        # output = self.relu(output)
+        # output = self.dropout(output)
+        # output = self.linear5(output)
+        # output = self.relu(output)
+        # output = self.dropout(output)
+        # output = self.linear6(output)
 
         return output, (h, c)
 
