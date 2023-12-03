@@ -195,13 +195,14 @@ def trans_predict(model, dataset):
 
             memory = model.encode(src, src_mark, mask_src)
             outputs = src[:, -1:, :]
+            tgt_mark = torch.cat([src_mark[:, -1:, :], tgt_mark], dim=1)
 
             #ループさせて逐次的に予測する
             for i in range(seq_len_tgt):
 
                 mask_tgt = (generate_square_subsequent_mask(outputs.size(1))).to(model.device)
 
-                output = model.decode(outputs, tgt_mark[:, i:i+1, :], memory, mask_tgt)
+                output = model.decode(outputs, tgt_mark[:, 0:i+1, :], memory, mask_tgt)
                 output = model.linear(output)  # output.shape = [バッチサイズ1, ウィンドウサイズi(累積される), 変数]
                 output = model.relu(output)
                 # output = model.linear2(output)
