@@ -61,9 +61,10 @@ class LSTM_seq2seq(nn.Module):
         # self.linear2 = nn.Linear(256, 10)
         # define fc layer for decoder
         self.linear3 = nn.Linear(hidden_size, 1024)
-        self.linear4 = nn.Linear(1024, 2048)
-        self.linear5 = nn.Linear(2048, 512)
-        self.linear6 = nn.Linear(512, num_features_pred)
+        self.linear4 = nn.Linear(1024, num_features_pred)
+        # self.linear4 = nn.Linear(1024, 2048)
+        # self.linear5 = nn.Linear(2048, 512)
+        # self.linear6 = nn.Linear(512, num_features_pred)
 
         # self.linear6 = nn.Linear(num_features, 256)
         # self.linear7 = nn.Linear(256, 10)
