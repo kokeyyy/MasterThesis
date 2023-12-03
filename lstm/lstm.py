@@ -48,13 +48,13 @@ class LSTM(nn.Module):
                             batch_first=True,
                             num_layers=num_layers,
                             dropout = dropout)
-        self.fc1 = nn.Linear(in_features=hidden_units, out_features=num_features_pred)
+        self.fc1 = nn.Linear(in_features=hidden_units, out_features=512)
         # self.fc2 = nn.Linear(in_features=256, out_features=512)
         # self.fc3 = nn.Linear(in_features=512, out_features=128)
-        # self.fc4 = nn.Linear(in_features=512, out_features=num_features_pred)
+        self.fc4 = nn.Linear(in_features=512, out_features=num_features_pred)
         self.relu = nn.ReLU()
 
-        self.dropout = nn.Dropout(0.2)
+        self.dropout = nn.Dropout(0.1)
 
     def set_optimizer(self, optimizer):
         self.optimizer = optimizer
@@ -68,15 +68,15 @@ class LSTM(nn.Module):
     def forward(self, src, hidden_states):     
         lstm_out, (h0, c0) = self.lstm(src, hidden_states)  # output size = (batch, sequence_length, hidden_size)
         output = self.fc1(lstm_out)
-        # output = self.relu(output)
-        # output = self.dropout(output)
+        output = self.relu(output)
+        output = self.dropout(output)
         # output = self.fc2(output)
         # output = self.relu(output)
         # output = self.dropout(output)
         # output = self.fc3(output)
         # output = self.relu(output)
         # output = self.dropout(output)
-        # output = self.fc4(output)
+        output = self.fc4(output)
         
         return output[:, :, :self.num_features_pred], (h0, c0)  # output.shape = [batch_size, seq_len_src, num_features_pred]
     
