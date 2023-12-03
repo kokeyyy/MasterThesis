@@ -54,7 +54,7 @@ class LSTM(nn.Module):
         self.fc4 = nn.Linear(in_features=512, out_features=num_features_pred)
         self.relu = nn.ReLU()
 
-        self.dropout = nn.Dropout(0.1)
+        self.dropout = nn.Dropout(0.2)
 
     def set_optimizer(self, optimizer):
         self.optimizer = optimizer
