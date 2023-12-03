@@ -22,19 +22,19 @@ class PositionalEmbedding(nn.Module):
         return self.pe[:, :x.size(1)]
     
     
-class TokenEmbedding(nn.Module):
-    def __init__(self, c_in:int, d_model:int):
-        super(TokenEmbedding, self).__init__()
-        padding = 1 if torch.__version__>='1.5.0' else 2
-        self.tokenConv = nn.Conv1d(in_channels=c_in, out_channels=d_model,
-                                    kernel_size=3, padding=padding, padding_mode='circular')
-        for m in self.modules():
-            if isinstance(m, nn.Conv1d):
-                nn.init.kaiming_normal_(m.weight,mode='fan_in',nonlinearity='leaky_relu')
+# class TokenEmbedding(nn.Module):
+#     def __init__(self, c_in:int, d_model:int):
+#         super(TokenEmbedding, self).__init__()
+#         padding = 1 if torch.__version__>='1.5.0' else 2
+#         self.tokenConv = nn.Conv1d(in_channels=c_in, out_channels=d_model,
+#                                     kernel_size=3, padding=padding, padding_mode='circular')
+#         for m in self.modules():
+#             if isinstance(m, nn.Conv1d):
+#                 nn.init.kaiming_normal_(m.weight,mode='fan_in',nonlinearity='leaky_relu')
 
-    def forward(self, x):
-        x = self.tokenConv(x.permute(0, 2, 1)).transpose(1,2)
-        return x
+#     def forward(self, x):
+#         x = self.tokenConv(x.permute(0, 2, 1)).transpose(1,2)
+#         return x
 
 #モデルに入力するために次元を拡張する
 class TokenEmbedding(nn.Module):
