@@ -62,7 +62,8 @@ class LSTM_seq2seq(nn.Module):
         # define fc layer for decoder
         self.linear3 = nn.Linear(hidden_size, 1024)
         self.linear4 = nn.Linear(1024, 2048)
-        self.linear5 = nn.Linear(2048, num_features_pred)
+        self.linear5 = nn.Linear(2048, 512)
+        self.linear6 = nn.Linear(512, num_features_pred)
 
         # self.linear6 = nn.Linear(num_features, 256)
         # self.linear7 = nn.Linear(256, 10)
@@ -118,6 +119,9 @@ class LSTM_seq2seq(nn.Module):
         output = self.relu(output)
         output = self.dropout(output)
         output = self.linear5(output)
+        output = self.relu(output)
+        output = self.dropout(output)
+        output = self.linear6(output)
 
         return output, (h, c)
 
