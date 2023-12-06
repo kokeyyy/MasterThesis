@@ -190,7 +190,7 @@ def anomaly_detection(df_valid_true, df_valid_pred, df_test_true, df_test_pred):
         all_anomaly_next_date.append(anomaly_next_date)
 
         # add row to summary df
-        summary.loc[name[:-6]] = [threshold, anomaly_date.shape[0]]
+        summary.loc[name] = [threshold, anomaly_date.shape[0]]
     
     display(summary)
 
