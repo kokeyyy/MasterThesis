@@ -38,8 +38,8 @@ def split_data(df, time_list, train_start, train_end, valid_start, valid_end, te
 def calc_rmse_mae(df_true, df_pred):
     rmse, mae = {}, {}
     for i in range(df_pred.shape[1]):
-        rmse[df_true.columns[i][:-6]] = mean_squared_error(df_true.iloc[:,i], df_pred.iloc[:,i], squared=False)
-        mae[df_true.columns[i][:-6]] = mean_absolute_error(df_true.iloc[:,i], df_pred.iloc[:,i])
+        rmse[df_true.columns[i]] = mean_squared_error(df_true.iloc[:,i], df_pred.iloc[:,i], squared=False)
+        mae[df_true.columns[i]] = mean_absolute_error(df_true.iloc[:,i], df_pred.iloc[:,i])
 
     rmse = pd.Series(rmse)
     mae = pd.Series(mae)
@@ -54,7 +54,7 @@ def plot_population(y_true, y_pred, title='Results', flag='plot', anomaly_dateti
     fig = make_subplots(rows=10,
                         cols=1,
                         horizontal_spacing=0.9,
-                        subplot_titles=[name[:-6] for name in y_true.columns])
+                        subplot_titles=[name for name in y_true.columns])
 
     for i in range(y_pred.shape[1]):
         fig.add_trace(go.Scatter(x=y_true.index, y=y_true.iloc[:, i],
