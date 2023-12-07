@@ -168,7 +168,7 @@ def anomaly_detection(df_valid_true, df_valid_pred, df_test_true, df_test_pred):
     : df_test_pred  :  predicted test data; dataframe
     : return        :  anomaly_date, anomaly_next_date; numpy array
     '''
-    all_anomaly_date, all_anomaly_next_date = [], []
+    all_anomaly_dates = []
     summary = pd.DataFrame([], columns=['Threshold', 'Number of Anomaly-Detected Data'])
 
     for name in df_valid_true.columns:
@@ -182,16 +182,12 @@ def anomaly_detection(df_valid_true, df_valid_pred, df_test_true, df_test_pred):
 
         # get the dates and next dates where anomaly_scores > threshold
         dates = pd.date_range(start=df_test_true.index[0], end=df_test_true.index[-1])
-        anomaly_date = dates[anomaly_scores > threshold]
-        anomaly_next_date = [date + datetime.timedelta(days=1) for date in anomaly_date]
-
-        # append to list
-        all_anomaly_date.append(anomaly_date)
-        all_anomaly_next_date.append(anomaly_next_date)
+        anomaly_dates = dates[anomaly_scores > threshold]
+        all_anomaly_dates.append(anomaly_dates)
 
         # add row to summary df
-        summary.loc[name] = [threshold, anomaly_date.shape[0]]
+        summary.loc[name] = [threshold, anomaly_dates.shape[0]]
     
     display(summary)
 
-    return all_anomaly_date, all_anomaly_next_date
+    return all_anomaly_dates
