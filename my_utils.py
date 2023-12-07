@@ -72,10 +72,10 @@ def plot_population(y_true, y_pred, title='Results', flag='plot', anomaly_dateti
         if flag == 'anomaly_detection':
             for t, next_t in zip(anomaly_datetime[i], anomaly_next_hours[i]):
                 fig.add_vrect(
-                            x0=t,
-                            x1=next_t,
-                            fillcolor='pink',
-                            opacity=0.9,
+                            x0=t - datetime.timedelta(hours=1),
+                            x1=t + datetime.timedelta(hours=1),
+                            fillcolor='green',
+                            opacity=0.25,
                             line_width=0,
                             layer='below',
                             row=i+1,
