@@ -168,26 +168,31 @@ def anomaly_detection(df_valid_true, df_valid_pred, df_test_true, df_test_pred):
     : df_test_pred  :  predicted test data; dataframe
     : return        :  anomaly_date, anomaly_next_date; numpy array
     '''
-    all_anomaly_dates = []
+    all_anomaly_hours = []
     summary = pd.DataFrame([], columns=['Threshold', 'Number of Anomaly-Detected Data'])
 
     for name in df_valid_true.columns:
-        # compute anomaly scores using valid data and set top 1% as threshold
-        valid_diff = np.reshape(np.array(df_valid_true[name] - df_valid_pred['pred_' + name]), (-1, 8))
-        threshold = np.percentile(calc_anomaly_scores(valid_diff, valid_diff), 99)
+        # OLD - compute daily scores using quadratic formula
+        # # compute anomaly scores using valid data and set top 1% as threshold
+        # valid_diff = np.reshape(np.array(df_valid_true[name] - df_valid_pred['pred_' + name]), (-1, 8))
+        # threshold = np.percentile(calc_anomaly_scores(valid_diff, valid_diff), 99)
 
-        # compute anomaly scores using test data
-        test_diff = np.reshape(np.array(df_test_true[name] - df_test_pred['pred_' + name]), (-1, 8))
-        anomaly_scores = calc_anomaly_scores(valid_diff, test_diff)
+        # # compute anomaly scores using test data
+        # test_diff = np.reshape(np.array(df_test_true[name] - df_test_pred['pred_' + name]), (-1, 8))
+        # anomaly_scores = calc_anomaly_scores(valid_diff, test_diff)
+
+        # set threshold using valid data and compute test data anomaly scores [score = (y_true - y_pred)^2]
+        threshold = np.percentile(np.square(df_valid_true[name] - df_valid_pred['pred_' + name]), 99)
+        anomaly_scores = np.square(df_test_true[name] - df_test_pred['pred_' + name])
 
         # get the dates and next dates where anomaly_scores > threshold
-        dates = pd.date_range(start=df_test_true.index[0], end=df_test_true.index[-1])
-        anomaly_dates = dates[anomaly_scores > threshold]
-        all_anomaly_dates.append(anomaly_dates)
+        dates = pd.date_range(start=df_test_true.index[0], end=df_test_true.index[-1], freq='3H')
+        anomaly_hours = dates[anomaly_scores > threshold]
+        all_anomaly_hours.append(anomaly_hours)
 
         # add row to summary df
-        summary.loc[name] = [threshold, anomaly_dates.shape[0]]
+        summary.loc[name] = [threshold, anomaly_hours.shape[0]]
     
     display(summary)
 
-    return all_anomaly_dates
+    return all_anomaly_hours
