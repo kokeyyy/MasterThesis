@@ -49,7 +49,7 @@ def calc_rmse_mae(df_true, df_pred):
 
     return results
 
-def plot_population(y_true, y_pred, title='Results', flag='plot', anomaly_datetime=None, anomaly_next_hours=None):
+def plot_population(y_true, y_pred, title='Results', flag='plot', anomaly_datetime=None):
     # plot with plotly
     fig = make_subplots(rows=10,
                         cols=1,
@@ -70,7 +70,7 @@ def plot_population(y_true, y_pred, title='Results', flag='plot', anomaly_dateti
         fig.update_yaxes(title='Population', showgrid=False, row=i+1, col=1)
 
         if flag == 'anomaly_detection':
-            for t, next_t in zip(anomaly_datetime[i], anomaly_next_hours[i]):
+            for t in zip(anomaly_datetime[i]):
                 fig.add_vrect(
                             x0=t - datetime.timedelta(hours=1),
                             x1=t + datetime.timedelta(hours=1),
