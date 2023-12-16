@@ -75,6 +75,8 @@ class DataEmbedding(nn.Module):
         # x = self.position_embedding(self.value_embedding(x)) + self.temporal_embedding(x_mark)
         # x = self.position_embedding(x) + self.temporal_embedding(x_mark)
         # x = self.position_embedding(x)
+        print(x.shape)
         x = self.position_embedding(self.value_embedding(x))
+        print(x.shape)
 
         return self.dropout(x)
