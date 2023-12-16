@@ -77,5 +77,4 @@ class DataEmbedding(nn.Module):
         
         # x = x + self.position_embedding(x)  # only positional encoding
         x = self.value_embedding(x) + self.position_embedding(x)  # token emb + positional encoding
-        print(x.shape)
         return self.dropout(x)
