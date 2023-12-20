@@ -71,7 +71,7 @@ class LSTM_seq2seq(nn.Module):
         # define relu
         self.relu = nn.ReLU()
         # define dropout
-        self.dropout = nn.Dropout(0.3)
+        self.dropout = nn.Dropout(dropout)
 
     def set_optimizer(self, optimizer):
         self.optimizer = optimizer
