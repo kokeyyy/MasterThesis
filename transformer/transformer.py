@@ -103,7 +103,7 @@ class Transformer(nn.Module):
         self.linear3 = nn.Linear(2048, d_output)
 
         self.relu = nn.ReLU()
-        self.dropout = nn.Dropout(0.2)
+        self.dropout = nn.Dropout(dropout)
 
     def set_optimizer(self, optimizer):
         self.optimizer = optimizer
