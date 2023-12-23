@@ -39,7 +39,7 @@ class LSTM_seq2seq(nn.Module):
     モデル1：全変数をLSTMに入力し、二層の線型結合層に通して予測値を出力
     '''
 
-    def __init__(self, trial, num_features, hidden_size, num_layers, dropout, num_features_pred, device):
+    def __init__(self, trial, num_features, hidden_size, num_layers, dropout, num_features_pred, d_linear, device):
 
         '''
         : param input_size:     the number of expected features in the input X
@@ -59,8 +59,8 @@ class LSTM_seq2seq(nn.Module):
         # self.linear = nn.Linear(num_features, 256)
         # self.linear2 = nn.Linear(256, 10)
         # define fc layer for decoder
-        self.linear3 = nn.Linear(hidden_size, 512)
-        self.linear4 = nn.Linear(512, num_features_pred)
+        self.linear3 = nn.Linear(hidden_size, d_linear)
+        self.linear4 = nn.Linear(d_linear, num_features_pred)
         # self.linear4 = nn.Linear(1024, 2048)
         # self.linear5 = nn.Linear(2048, 512)
         # self.linear6 = nn.Linear(512, num_features_pred)
