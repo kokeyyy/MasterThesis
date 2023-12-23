@@ -59,7 +59,7 @@ def generate_square_subsequent_mask(seq_len):
 
 class Transformer(nn.Module):
     def __init__(self, trial, num_features, num_features_pred, device, num_encoder_layers, num_decoder_layers,
-        enc_in, dec_in, d_model, d_output,
+        enc_in, dec_in, d_model, d_output, d_linear,
         dim_feedforward = 512, dropout = 0.1, nhead = 8, freq='h'):
 
         super(Transformer, self).__init__()
@@ -99,9 +99,9 @@ class Transformer(nn.Module):
                                                       norm=decoder_norm)
 
         # define output layer
-        self.linear = nn.Linear(d_model, 2048)
+        self.linear = nn.Linear(d_model, d_linear)
         # self.linear2 = nn.Linear(128, 512)
-        self.linear3 = nn.Linear(2048, d_output)
+        self.linear3 = nn.Linear(d_linear, d_output)
 
         self.relu = nn.ReLU()
         self.dropout = nn.Dropout(dropout)
