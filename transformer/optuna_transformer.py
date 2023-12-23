@@ -166,8 +166,8 @@ def trans_train(model, data_loader):
         total_loss.append(loss.cpu().detach())
         model.optimizer.step()
 
-    # change learning rate
-    model.scheduler.step()
+    # # change learning rate
+    # model.scheduler.step()
 
     return np.average(total_loss)
 
