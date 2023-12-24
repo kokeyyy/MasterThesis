@@ -167,6 +167,28 @@ def lstm_train(model, data_loader):
     return np.average(total_loss)
 
 
+def lstm_eval(model, data_loader):
+    model.eval()
+    with torch.no_grad():
+        total_loss = []
+        for _, (src, tgt) in enumerate(data_loader):
+            src = src.to(model.device)
+            tgt = tgt.to(model.device)
+
+            # target for decoder
+            input_tgt = torch.cat((src[:,-1:,:], tgt[:, :-1, :]), dim=1)
+
+            output = model(src=src, tgt=input_tgt)
+
+            # compute the loss
+            loss = model.criterion(output[:,:,0:model.num_features_pred], tgt[:,:,0:model.num_features_pred])
+
+            total_loss.append(loss.cpu().detach())
+
+        # return loss for epoch
+        return np.average(total_loss)
+
+
 def lstm_predict(model, dataset):
     model.eval()
     with torch.no_grad():
