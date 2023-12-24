@@ -171,6 +171,32 @@ def trans_train(model, data_loader):
     return np.average(total_loss)
 
 
+def trans_eval(model, data_loader):
+    model.eval()
+    with torch.no_grad():
+        total_loss = []
+        for src, tgt, src_mark, tgt_mark in data_loader:
+
+            src = src.float().to(model.device)
+            tgt = tgt.float().to(model.device)
+            src_mark = src_mark.float().to(model.device)
+            tgt_mark = tgt_mark.float().to(model.device)
+
+            input_tgt = torch.cat((src[:,-1:,:],tgt[:,:-1,:]), dim=1)
+            input_tgt_mark = torch.cat((src_mark[:,-1:,:],tgt_mark[:,:-1,:]), dim=1)
+
+            mask_src, mask_tgt = create_mask(src, input_tgt, model.device)
+
+            output = model(src=src, tgt=input_tgt, src_mark = src_mark, tgt_mark = input_tgt_mark, mask_src=mask_src, mask_tgt=mask_tgt)
+
+            loss = model.criterion(output[:,:,0:model.num_features_pred], tgt[:,:,0:model.num_features_pred])
+
+            total_loss.append(loss.cpu().detach())
+            model.optimizer.step()
+
+        return np.average(total_loss)
+
+
 def trans_predict(model, dataset):
     model.eval()
     with torch.no_grad():
