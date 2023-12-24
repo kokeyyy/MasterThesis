@@ -137,6 +137,7 @@ class LSTM_seq2seq(nn.Module):
         return decoder_output
 
 def lstm_train(model, data_loader):
+    model.train()
     total_loss = []
     for _, (src, tgt) in enumerate(data_loader):
         src = src.to(model.device)
