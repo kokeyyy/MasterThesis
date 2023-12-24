@@ -49,7 +49,6 @@ class LSTM_seq2seq(nn.Module):
         super(LSTM_seq2seq, self).__init__()
         self.hidden_size = hidden_size
         self.num_layers = num_layers
-        self.batch_size= batch_size
         self.num_features_pred = num_features_pred
         self.device = device
 
