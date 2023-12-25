@@ -49,7 +49,7 @@ def calc_rmse_mae(df_true, df_pred):
 
     return results
 
-def plot_population(y_true, y_pred, title='Results', flag='plot', anomaly_datetime=None):
+def plot_population(y_true, y_pred, title='Results', flag='plot', anomaly_datetime=None, show=True):
     # plot with plotly
     fig = make_subplots(rows=10,
                         cols=1,
@@ -99,7 +99,9 @@ def plot_population(y_true, y_pred, title='Results', flag='plot', anomaly_dateti
                         "yref": "container",
                     }
                     )
-    fig.show()
+    
+    if show == True:
+        fig.show()
     
     return fig
 
