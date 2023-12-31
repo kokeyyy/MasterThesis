@@ -110,6 +110,31 @@ def lstm_train(model, data_loader):
 
     return np.average(total_losses)
 
+
+def lstm_eval(model, data_loader):
+    total_losses = []
+    model.eval()
+    with torch.no_grad():  
+        for src, tgt in data_loader:
+            src = src.to(model.device)
+            tgt = tgt.to(model.device)
+            
+            # initialize hidden states
+            hidden_states = None
+            
+            # input for lstm
+            input_src = torch.cat((src[:,-1:,:], tgt[:, :-1, :]), dim=1)
+            # input_src = src
+            
+            output, hidden = model(input_src, hidden_states)
+            
+            # compute the loss
+            loss = model.criterion(output, tgt[:, :, :model.num_features_pred])
+    
+            total_losses.append(loss.item())
+    
+        return np.average(total_losses)
+
 def lstm_predict(model, dataset):
     model.eval()
     with torch.no_grad():   
