@@ -35,7 +35,7 @@ class LSTMSequenceDataset(Dataset):
 
 # lstm - cat - fc -
 class LSTM(nn.Module):
-    def __init__(self, num_features, hidden_units, num_layers, dropout, num_features_pred, device):
+    def __init__(self, num_features, hidden_units, num_layers, dropout, num_features_pred, d_linear, device):
         super().__init__()
         self.num_features= num_features
         self.hidden_units = hidden_units
@@ -48,10 +48,10 @@ class LSTM(nn.Module):
                             batch_first=True,
                             num_layers=num_layers,
                             dropout = dropout)
-        self.fc1 = nn.Linear(in_features=hidden_units, out_features=512)
+        self.fc1 = nn.Linear(in_features=hidden_units, out_features=d_linear)
         # self.fc2 = nn.Linear(in_features=256, out_features=512)
         # self.fc3 = nn.Linear(in_features=512, out_features=128)
-        self.fc4 = nn.Linear(in_features=512, out_features=num_features_pred)
+        self.fc4 = nn.Linear(in_features=d_linear, out_features=num_features_pred)
         self.relu = nn.ReLU()
 
         self.dropout = nn.Dropout(0.2)
