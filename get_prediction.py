@@ -213,9 +213,4 @@ def get_prediction(raw_df, model_type, model_num_list, result_path):
         resid_df = pd.concat([resid_df,df_pred_ss])
 
     return df_train_pred_ss, df_valid_pred_ss, df_test_pred_ss
-
-if __name__ == '__main__':
-    # set model_num to predict
-    # model_num_list = range(183, 193)
-    model_num_list = list(range(176, 183)) + list(range(193, 196))
-    get_prediction(raw_df=raw_df, model_type='lstm_seq2seq', model_num_list=model_num_list, result_path=)
+ 
